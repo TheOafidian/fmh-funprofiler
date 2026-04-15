@@ -63,7 +63,7 @@ Check the arguments for correctness.
 """
 def check_args(args):
     # check if the metagenome file exists
-    if not os.path.exists(args.mg_filename):
+    if not os.path.exists(args.mg_filename) and args.mg_filename != "-":
         print(f'Error: Metagenome file {args.mg_filename} does not exist. Exiting...')
         sys.exit(1)
 
@@ -96,6 +96,8 @@ Create a sketch of the metagenome sample. Returns the filename of the sketch.
 def create_sketch(mg_filename, ksize, scaled):
     print('Creating metagenome sketch...')
     metagenome_sketch_filename = f'{mg_filename}_sketch_{int(time.time())}.sig.zip'
+    if mg_filename == "-":
+        metagenome_sketch_filename = "STDIN" + metagenome_sketch_filename.lstrip("-")
 
     # make sure that write permission is available on sketch filename
     if os.path.exists(metagenome_sketch_filename):
